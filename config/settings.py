@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'certificates',
     'signatures',
     'logs',
+    'documentacion',
 ]
 
 MIDDLEWARE = [
@@ -98,3 +99,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+import os
+
+# Configuración de archivos subidos
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

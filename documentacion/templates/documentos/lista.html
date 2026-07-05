@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Documentos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-file-alt text-primary"></i> Mis Documentos
+                </h1>
+                <a href="{% url 'documentos:crear' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Subir Documento
+                </a>
+            </div>
+
+            <!-- Tarjetas de estadísticas -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Documentos</h5>
+                            <h2 class="mb-0">{{ total_documentos }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Documentos Firmados</h5>
+                            <h2 class="mb-0">{{ documentos_firmados }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Pendientes de Firma</h5>
+                            <h2 class="mb-0">{{ total_documentos|add:documentos_firmados|add:"-0" }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buscador -->
+            <form method="GET" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Buscar documentos..." value="{{ query }}">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Lista de documentos -->
+            {% if page_obj %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Título</th>
+                                <th>Fecha</th>
+                                <th>Tamaño</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for documento in page_obj %}
+                            <tr>
+                                <td>
+                                    <strong>{{ documento.titulo }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ documento.archivo.name|truncatechars:30 }}</small>
+                                </td>
+                                <td>
+                                    {{ documento.fecha_carga|date:"d/m/Y" }}
+                                    <br>
+                                    <small class="text-muted">{{ documento.fecha_carga|time:"H:i" }}</small>
+                                </td>
+                                <td>{{ documento.get_tamaño }}</td>
+                                <td>
+                                    {% if documento.esta_firmado %}
+                                        <span class="badge bg-success">Firmado</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Sin firmar</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'documentos:detalle' documento.pk %}" class="btn btn-info" title="Ver">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'documentos:descargar' documento.pk %}" class="btn btn-success" title="Descargar">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <a href="{% url 'documentos:editar' documento.pk %}" class="btn btn-warning" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'documentos:eliminar' documento.pk %}" class="btn btn-danger" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                {% if page_obj.has_other_pages %}
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
+                            </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-4x text-muted mb-3"></i>
+                    <h4>No hay documentos</h4>
+                    <p class="text-muted">Comienza subiendo tu primer documento</p>
+                    <a href="{% url 'documentos:crear' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Subir Documento
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
