@@ -1,0 +1,43 @@
+<h1>Certificados</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Subir Certificado
+    </button>
+</form>
+
+<hr>
+
+{% for certificado in certificados %}
+
+<h3>Certificado</h3>
+
+<p><strong>Serie:</strong> {{ certificado.numero_serie }}</p>
+
+<p><strong>RFC:</strong> {{ certificado.rfc }}</p>
+
+<p><strong>CURP:</strong> {{ certificado.curp }}</p>
+
+<p><strong>Subject:</strong> {{ certificado.subject }}</p>
+
+<p><strong>Issuer:</strong> {{ certificado.issuer }}</p>
+
+<p><strong>Inicio:</strong> {{ certificado.fecha_inicio }}</p>
+
+<p><strong>Expiración:</strong> {{ certificado.fecha_expiracion }}</p>
+
+<p><strong>Algoritmo:</strong> {{ certificado.algoritmo_firma }}</p>
+
+<p><strong>SHA256:</strong> {{ certificado.huella_sha256 }}</p>
+
+<hr>
+
+{% empty %}
+
+<p>No hay certificados registrados.</p>
+
+{% endfor %}
