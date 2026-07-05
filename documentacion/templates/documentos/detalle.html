@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle: {{ documento.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ documento.titulo }}</h4>
+                    <span class="badge {% if documento.esta_firmado %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                        {% if documento.esta_firmado %}Firmado{% else %}Sin firmar{% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Propietario:</strong>
+                            <p>{{ documento.usuario.get_full_name|default:documento.usuario.username }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Fecha de carga:</strong>
+                            <p>{{ documento.fecha_carga|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Archivo:</strong>
+                            <p>{{ documento.archivo.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Tamaño:</strong>
+                            <p>{{ documento.get_tamaño }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if documento.descripcion %}
+                    <div class="mb-3">
+                        <strong>Descripción:</strong>
+                        <p>{{ documento.descripcion }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <strong>Hash SHA-256:</strong>
+                        <div class="bg-light p-2 rounded">
+                            <code class="text-break">{{ documento.hash_sha256|default:"No calculado" }}</code>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="btn-group w-100" role="group">
+                            <a href="{% url 'documentos:descargar' documento.pk %}" class="btn btn-success">
+                                <i class="fas fa-download"></i> Descargar
+                            </a>
+                            <a href="{% url 'documentos:editar' documento.pk %}" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="{% url 'documentos:verificar_hash' documento.pk %}" class="btn btn-info">
+                                <i class="fas fa-shield-alt"></i> Verificar Integridad
+                            </a>
+                            <a href="{% url 'documentos:eliminar' documento.pk %}" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Información</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Extensión:</strong>
+                        <span class="badge bg-secondary">{{ documento.get_extension|default:"N/A" }}</span>
+                    </div>
+                    <hr>
+                    <small class="text-muted">
+                        Última actualización: {{ documento.fecha_actualizacion|date:"d/m/Y H:i" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
