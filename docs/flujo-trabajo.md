@@ -2,29 +2,28 @@
 
 ## Ramas
 - main: producción
-- develop: integración
 - feature/*: desarrollo por módulo
 
 ## Reglas
-1. Nunca trabajar directo en main ni en develop.
+1. Nunca trabajar directo en main sin revisar primero en una rama feature.
 2. Cada cambio importante debe ir en un commit claro.
-3. Antes de subir cambios, actualizar con `git pull origin develop`.
-4. Crear Pull Request para integrar cambios.
+3. Antes de subir cambios, actualizar con `git pull origin main`.
+4. Crear Pull Request hacia main para integrar cambios.
 5. Julio revisa y hace merge.
 
 ## Cómo bajar y actualizar cambios
 Cada vez que empiecen a trabajar:
 
 ```bash
-git checkout develop
-git pull origin develop
+git checkout main
+git pull origin main
 ```
 
 Si van a trabajar en una rama específica:
 
 ```bash
 git checkout feature/documentos
-git pull origin develop
+git pull origin main
 ```
 
 ## Orden de trabajo recomendado
