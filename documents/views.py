@@ -1,4 +1,5 @@
 import os
+import mimetypes
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -93,7 +94,14 @@ def descargar_documento(request, pk):
     documento = get_object_or_404(Documento, pk=pk, usuario=request.user)
 
     if documento.archivo and os.path.exists(documento.archivo.path):
-        return FileResponse(open(documento.archivo.path, 'rb'), as_attachment=True, filename=os.path.basename(documento.archivo.name))
+        content_type, _ = mimetypes.guess_type(documento.archivo.name)
+        response = FileResponse(
+            documento.archivo.open('rb'),
+            as_attachment=True,
+            filename=os.path.basename(documento.archivo.name),
+            content_type=content_type or 'application/octet-stream',
+        )
+        return response
 
     messages.error(request, 'El archivo no existe en el servidor.')
     return redirect('documentos:detalle', pk=documento.pk)
