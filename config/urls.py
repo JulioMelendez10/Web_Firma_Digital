@@ -19,35 +19,19 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 from django.urls import include, path
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-
-    path(
-        'certificates/',
-        include('certificates.urls')
-    ),
-]
-
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
-from django.contrib import admin
-from django.urls import path, include 
-from django.conf import settings
-from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('documents/', RedirectView.as_view(pattern_name='documentos:lista', permanent=False)),
-    path('documentacion/', RedirectView.as_view(pattern_name='documentos:lista', permanent=False)),
-    path('documentos/', include('documents.urls')),
+    path('documents/', include('documentacion.urls')),
+    path('documentos/', RedirectView.as_view(url='/documents/', permanent=False)),
+    path('documentacion/', RedirectView.as_view(url='/documents/', permanent=False)),
+    path('certificates/', include('certificates.urls')),
+    path('signatures/', include('signatures.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('logs/', include('logs.urls')),
 ]
 
-# Servir archivos multimedia en desarrollo
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

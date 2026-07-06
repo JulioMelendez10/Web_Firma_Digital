@@ -30,6 +30,15 @@ class Documento(models.Model):
     
     # Estado
     esta_firmado = models.BooleanField(default=False, verbose_name="¿Está firmado?")
+    certificado = models.ForeignKey(
+        'certificates.Certificado',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Certificado usado"
+    )
+    firma_sha256 = models.TextField(blank=True, verbose_name="Firma SHA-256")
+    fecha_firma = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de firma")
     
     class Meta:
         verbose_name = "Documento"
