@@ -1,0 +1,13 @@
+flowchart TD
+  U[Usuario] -->|Sube .cer/.key| C[Certificados - /certificates/]
+  U -->|Sube documento| D[Documentos - /documents/]
+  U -->|Selecciona cert + pwd| V[Vista Detalle Documento]
+  V -->|Calcula hash SHA-256| H[Hash SHA-256]
+  V -->|Carga .key y firma hash| S[Firma con llave privada]
+  S -->|Almacena firma| DB[(Base de Datos)]
+  DB -->|Almacena: Documento.firma_sha256, fecha_firma, certificado| D
+  U -->|Verificar| V
+  V -->|Toma firma y .cer, verifica| R[Resultado de verificación]
+  R --> U
+
+  style DB fill:#f9f,stroke:#333,stroke-width:2px

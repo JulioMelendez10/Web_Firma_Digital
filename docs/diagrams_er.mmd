@@ -1,0 +1,29 @@
+erDiagram
+    DOCUMENTO {
+        int id PK
+        string titulo
+        string descripcion
+        string archivo_path
+        string hash_sha256
+        bool esta_firmado
+        text firma_sha256
+        datetime fecha_firma
+        int certificado_id FK
+    }
+
+    CERTIFICADO {
+        int id PK
+        string archivo_cer_path
+        string archivo_key_path
+        string numero_serie
+        string subject
+        string issuer
+        string rfc
+        string curp
+        datetime fecha_inicio
+        datetime fecha_expiracion
+        string algoritmo_firma
+        string huella_sha256
+    }
+
+    DOCUMENTO }o--|| CERTIFICADO : "usa/puede referenciar"

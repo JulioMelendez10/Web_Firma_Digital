@@ -1,0 +1,31 @@
+classDiagram
+    class Documento {
+      +int id
+      +string titulo
+      +string descripcion
+      +File archivo
+      +string hash_sha256
+      +bool esta_firmado
+      +string firma_sha256
+      +datetime fecha_firma
+      +calcular_hash()
+      +guardar_con_hash()
+      +firmar_documento(certificado, key_password)
+    }
+
+    class Certificado {
+      +int id
+      +File archivo_cer
+      +File archivo_key
+      +string numero_serie
+      +string subject
+      +string issuer
+      +string rfc
+      +datetime fecha_inicio
+      +datetime fecha_expiracion
+      +string algoritmo_firma
+      +string huella_sha256
+      +extraer_metadatos()
+    }
+
+    Documento --> Certificado : "usa referencia a"
