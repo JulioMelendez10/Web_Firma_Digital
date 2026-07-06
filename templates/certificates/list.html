@@ -1,22 +1,53 @@
-<h1>Certificados</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Certificados</h1>
+    <small class="text-muted">Sube tu .cer y .key para firmar documentos</small>
+</div>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="mb-4">
     {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form.archivo_cer.label_tag }}
+                {{ form.archivo_cer }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form.archivo_key.label_tag }}
+                {{ form.archivo_key }}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">
         Subir Certificado
     </button>
 </form>
 
-<hr>
+<hr />
 
-{% for certificado in certificados %}
-
-<h3>Certificado</h3>
-
-<p><strong>Serie:</strong> {{ certificado.numero_serie }}</p>
+{% if certificados %}
+    {% for certificado in certificados %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Certificado</h5>
+                <p><strong>Serie:</strong> {{ certificado.numero_serie }}</p>
+                <p><strong>RFC:</strong> {{ certificado.rfc }}</p>
+                <p><strong>CURP:</strong> {{ certificado.curp }}</p>
+                <p><strong>Subject:</strong> {{ certificado.subject }}</p>
+                <p><strong>Issuer:</strong> {{ certificado.issuer }}</p>
+                <p><strong>Inicio:</strong> {{ certificado.fecha_inicio }}</p>
+                <p><strong>Expiración:</strong> {{ certificado.fecha_expiracion }}</p>
+                <p><strong>Algoritmo:</strong> {{ certificado.algoritmo_firma }}</p>
+                <p><strong>SHA256:</strong> {{ certificado.huella_sha256 }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        No hay certificados registrados.
+    </div>
+{% endif %}
 
 <p><strong>RFC:</strong> {{ certificado.rfc }}</p>
 

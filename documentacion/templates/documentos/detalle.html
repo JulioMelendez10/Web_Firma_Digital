@@ -66,6 +66,49 @@
                             </a>
                         </div>
                     </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5>Firma digital</h5>
+                            {% if documento.esta_firmado %}
+                                <p class="mb-2"><strong>Estado:</strong> <span class="badge bg-success">Firmado</span></p>
+                                <p class="mb-2"><strong>Certificado:</strong> {{ documento.certificado.numero_serie }}</p>
+                                <p class="mb-2"><strong>RFC:</strong> {{ documento.certificado.rfc }}</p>
+                                <p class="mb-2"><strong>Fecha de firma:</strong> {{ documento.fecha_firma|date:"d/m/Y H:i" }}</p>
+                                <p class="mb-2"><strong>Firma SHA-256:</strong></p>
+                                <div class="bg-light p-2 rounded">
+                                    <code class="text-break">{{ documento.firma_sha256 }}</code>
+                                </div>
+                                <a href="{% url 'documentos:verificar_firma' documento.pk %}" class="btn btn-outline-primary mt-3">
+                                    <i class="fas fa-check-circle"></i> Verificar Firma
+                                </a>
+                            {% else %}
+                                <p class="mb-3">El documento aún no está firmado digitalmente.</p>
+                                <form method="post" action="{% url 'documentos:firmar' documento.pk %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="certificado_id" class="form-label">Seleccionar certificado</label>
+                                        <select id="certificado_id" name="certificado_id" class="form-select" required>
+                                            <option value="">Selecciona un certificado</option>
+                                            {% for cert in certificados %}
+                                                <option value="{{ cert.pk }}">{{ cert.numero_serie }} - {{ cert.rfc }}</option>
+                                            {% empty %}
+                                                <option value="" disabled>No hay certificados disponibles</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="key_password" class="form-label">Contraseña de la llave privada (opcional)</label>
+                                        <input id="key_password" name="key_password" type="password" class="form-control" placeholder="Contraseña de .key" />
+                                        <div class="form-text">Si tu archivo .key está cifrado, ingresa aquí la contraseña.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-signature"></i> Firmar documento
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

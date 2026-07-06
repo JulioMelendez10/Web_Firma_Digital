@@ -3,6 +3,7 @@ import re
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
 from django.shortcuts import render, redirect
 
@@ -75,9 +76,13 @@ def certificate_list(request):
 
             certificado_obj = form.save(commit=False)
 
-            datos = extraer_datos_certificado(
-                request.FILES['archivo_cer']
-            )
+            try:
+                datos = extraer_datos_certificado(
+                    request.FILES['archivo_cer']
+                )
+            except Exception:
+                messages.error(request, 'El archivo .cer no es un certificado válido.')
+                return redirect('certificates')
 
             certificado_obj.numero_serie = datos['numero_serie']
             certificado_obj.subject = datos['subject']
@@ -89,8 +94,19 @@ def certificate_list(request):
             certificado_obj.algoritmo_firma = datos['algoritmo_firma']
             certificado_obj.huella_sha256 = datos['huella_sha256']
 
+            try:
+                with open(request.FILES['archivo_key'].temporary_file_path(), 'rb') as key_file:
+                    key_bytes = key_file.read()
+                    load_pem_private_key(key_bytes, password=None)
+            except Exception:
+                messages.warning(
+                    request,
+                    'El archivo .key no pudo validarse sin contraseña. Si está cifrado, intenta firmar con la contraseña correspondiente.'
+                )
+
             certificado_obj.save()
 
+            messages.success(request, 'Certificado registrado correctamente.')
             return redirect('certificates')
 
     else:
