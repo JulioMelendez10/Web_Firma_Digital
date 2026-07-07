@@ -15,7 +15,6 @@ class Migration(migrations.Migration):
             name='Certificado',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-<<<<<<< HEAD
                 ('archivo_cer', models.FileField(upload_to='certificados/cer/')),
                 ('archivo_key', models.FileField(upload_to='certificados/key/')),
                 ('numero_serie', models.CharField(blank=True, max_length=255)),
@@ -28,8 +27,6 @@ class Migration(migrations.Migration):
                 ('algoritmo_firma', models.CharField(blank=True, max_length=255)),
                 ('huella_sha256', models.CharField(blank=True, max_length=255)),
                 ('fecha_registro', models.DateTimeField(auto_now_add=True)),
-=======
->>>>>>> main
             ],
             options={
                 'verbose_name': 'Certificado',
