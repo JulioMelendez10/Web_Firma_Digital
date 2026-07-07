@@ -8,19 +8,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+X6q+qO3fY4v+jN0ntKwhIO/W3QYdJ3O0dVYgTgRXy5Z0HNIMT2+Hpx0lN4pEoN23XBdZ8ODeHxoR5Y1Yk7Qg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">Web Firma Digital</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/documents/">Documentos</a>
-                <a class="nav-link" href="/certificates/">Certificados</a>
-                <a class="nav-link" href="/signatures/">Firmas</a>
-                <a class="nav-link" href="/logs/">Historial</a>
-            </div>
+                <a class="nav-link" href="/dashboard/">Dashboard</a>
+            <a class="nav-link" href="/documents/">Documentos</a>
+            <a class="nav-link" href="/certificates/">Certificados</a>
+            <a class="nav-link" href="/signatures/">Firmas</a>
+            <a class="nav-link" href="/logs/">Historial</a>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main class="container py-4">
         {% if messages %}
