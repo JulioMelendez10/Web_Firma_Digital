@@ -1,3 +1,6 @@
+# Diagrama de Flujo
+
+```mermaid
 flowchart TD
   U[Usuario] -->|Sube .cer/.key| C[Certificados - /certificates/]
   U -->|Sube documento| D[Documentos - /documents/]
@@ -11,3 +14,4 @@ flowchart TD
   R --> U
 
   style DB fill:#f9f,stroke:#333,stroke-width:2px
+```

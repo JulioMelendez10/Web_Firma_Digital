@@ -5,7 +5,9 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
+from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .forms import CertificadoForm
 from .models import Certificado
@@ -59,6 +61,7 @@ def extraer_datos_certificado(archivo):
     }
 
 
+@login_required
 def certificate_list(request):
 
     certificados = Certificado.objects.all().order_by(

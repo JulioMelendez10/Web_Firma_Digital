@@ -48,27 +48,3 @@
         No hay certificados registrados.
     </div>
 {% endif %}
-
-<p><strong>RFC:</strong> {{ certificado.rfc }}</p>
-
-<p><strong>CURP:</strong> {{ certificado.curp }}</p>
-
-<p><strong>Subject:</strong> {{ certificado.subject }}</p>
-
-<p><strong>Issuer:</strong> {{ certificado.issuer }}</p>
-
-<p><strong>Inicio:</strong> {{ certificado.fecha_inicio }}</p>
-
-<p><strong>Expiración:</strong> {{ certificado.fecha_expiracion }}</p>
-
-<p><strong>Algoritmo:</strong> {{ certificado.algoritmo_firma }}</p>
-
-<p><strong>SHA256:</strong> {{ certificado.huella_sha256 }}</p>
-
-<hr>
-
-{% empty %}
-
-<p>No hay certificados registrados.</p>
-
-{% endfor %}

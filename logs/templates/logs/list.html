@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h1>{{ title }}</h1>
+        <p class="text-muted mb-4">Historial de documentos cargados y sus estados.</p>
+
+        {% if documentos %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Fecha de carga</th>
+                        <th>Firmado</th>
+                        <th>Certificado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for documento in documentos %}
+                        <tr>
+                            <td>{{ documento.titulo }}</td>
+                            <td>{{ documento.fecha_carga|date:'d M Y H:i' }}</td>
+                            <td>{% if documento.esta_firmado %}Sí{% else %}No{% endif %}</td>
+                            <td>{% if documento.certificado %}{{ documento.certificado.numero_serie }}{% else %}-{% endif %}</td>
+                            <td>
+                                <a href="{% url 'documentos:detalle' documento.pk %}" class="btn btn-sm btn-primary">Ver</a>
+                                {% if documento.esta_firmado %}
+                                    <a href="{% url 'documentos:verificar_firma' documento.pk %}" class="btn btn-sm btn-secondary">Verificar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info">No hay documentos en el historial.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

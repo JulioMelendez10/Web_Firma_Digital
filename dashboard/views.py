@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from certificates.models import Certificado
 from documentacion.models import Documento
 
 
+@login_required
 def home(request):
     total_documentos = Documento.objects.count()
     documentos_firmados = Documento.objects.filter(esta_firmado=True).count()

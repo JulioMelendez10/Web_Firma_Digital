@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h1>{{ title }}</h1>
+        <p class="text-muted mb-4">Documentos firmados digitalmente por este usuario.</p>
+
+        {% if firmas %}
+            <div class="list-group">
+                {% for documento in firmas %}
+                    <div class="list-group-item mb-3">
+                        <h5>{{ documento.titulo }}</h5>
+                        <p>{{ documento.descripcion|default:'Sin descripción' }}</p>
+                        <p><strong>Fecha de firma:</strong> {{ documento.fecha_firma|date:'d M Y H:i' }}</p>
+                        <p><strong>Certificado:</strong> {{ documento.certificado.numero_serie }}</p>
+                        <p><strong>Hash:</strong> {{ documento.hash_sha256 }}</p>
+                        <a href="{% url 'documentos:detalle' documento.pk %}" class="btn btn-outline-primary">Ver documento</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aún no tienes documentos firmados.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

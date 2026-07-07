@@ -1,3 +1,6 @@
+# Diagrama de Clases
+
+```mermaid
 classDiagram
     class Documento {
       +int id
@@ -29,3 +32,4 @@ classDiagram
     }
 
     Documento --> Certificado : "usa referencia a"
+```

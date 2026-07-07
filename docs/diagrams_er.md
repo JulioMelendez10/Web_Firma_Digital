@@ -1,3 +1,6 @@
+# Diagrama ER
+
+```mermaid
 erDiagram
     DOCUMENTO {
         int id PK
@@ -27,3 +30,4 @@ erDiagram
     }
 
     DOCUMENTO }o--|| CERTIFICADO : "usa/puede referenciar"
+```
