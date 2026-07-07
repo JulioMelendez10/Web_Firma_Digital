@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+    <aside class="dashboard-sidebar d-none d-xl-flex flex-column">
+        <div>
+            <div class="dashboard-sidebar-brand">
+                <div class="dashboard-brand-mark">FD</div>
+                <div>
+                    <p class="dashboard-app-name mb-0">Firma Digital</p>
+                    <p class="dashboard-app-subtitle mb-0">Panel administrativo</p>
+                </div>
+            </div>
+
+            <nav class="dashboard-menu" aria-label="Sidebar navigation">
+                <a href="/dashboard/" class="dashboard-menu-item active">
+                    <i class="bi bi-speedometer2"></i>
+                    Dashboard
+                </a>
+                <a href="/documents/" class="dashboard-menu-item">
+                    <i class="bi bi-file-earmark-text"></i>
+                    Documentos
+                </a>
+                <a href="/certificates/" class="dashboard-menu-item">
+                    <i class="bi bi-award"></i>
+                    Certificados
+                </a>
+                <a href="/signatures/" class="dashboard-menu-item">
+                    <i class="bi bi-pencil-square"></i>
+                    Firmas
+                </a>
+                <a href="/logs/" class="dashboard-menu-item">
+                    <i class="bi bi-journal-text"></i>
+                    Historial
+                </a>
+            </nav>
+        </div>
+
+        <div class="dashboard-sidebar-footer mt-4">
+            <p class="mb-1 small">Cliente actual</p>
+            <p class="mb-2">Equipo de Firma Digital</p>
+            <small>Actualizado recientemente</small>
+        </div>
+    </aside>
+
+    <main class="dashboard-main">
+        <section class="dashboard-header">
+            <div class="dashboard-header-info">
+                <p class="text-uppercase small text-secondary mb-1">Resumen</p>
+                <h1>{{ title }}</h1>
+                <p class="dashboard-subtitle">Monitorea tus documentos, firmas y certificados desde un solo lugar elegante y profesional.</p>
+            </div>
+            <div class="dashboard-actions">
+                <a class="btn btn-dashboard-secondary" href="/documents/">Ver documentos</a>
+                <button class="btn btn-dashboard-primary">Nueva acción</button>
+            </div>
+        </section>
+
+        <section class="dashboard-cards">
+            <article class="dashboard-card dashboard-card-documents">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-uppercase text-secondary mb-2">Documentos</p>
+                        <h3 class="dashboard-card-amount">{{ total_documentos }}</h3>
+                    </div>
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-folder2-open"></i>
+                    </div>
+                </div>
+                <p class="dashboard-card-title">Total de documentos subidos</p>
+            </article>
+
+            <article class="dashboard-card dashboard-card-signed">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-uppercase text-secondary mb-2">Firmados</p>
+                        <h3 class="dashboard-card-amount">{{ documentos_firmados }}</h3>
+                    </div>
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+                </div>
+                <p class="dashboard-card-title">Documentos con firma digital</p>
+            </article>
+
+            <article class="dashboard-card dashboard-card-certificates">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-uppercase text-secondary mb-2">Certificados</p>
+                        <h3 class="dashboard-card-amount">{{ certificados_totales }}</h3>
+                    </div>
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-award"></i>
+                    </div>
+                </div>
+                <p class="dashboard-card-title">Certificados disponibles</p>
+            </article>
+
+            <article class="dashboard-card dashboard-card-pending">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-uppercase text-secondary mb-2">Pendientes</p>
+                        <h3 class="dashboard-card-amount">{{ documentos_por_firmar }}</h3>
+                    </div>
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                </div>
+                <p class="dashboard-card-title">Documentos pendientes de firma</p>
+            </article>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="dashboard-list-card">
+                <h2>Últimos documentos</h2>
+                {% if ultimos_documentos %}
+                    <ul class="dashboard-list">
+                        {% for documento in ultimos_documentos %}
+                            <li class="dashboard-list-item">
+                                <div class="dashboard-list-item-left">
+                                    <div class="dashboard-list-icon">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                    </div>
+                                    <div class="dashboard-list-content">
+                                        <strong>{{ documento.titulo }}</strong>
+                                        <div class="dashboard-list-meta">
+                                            <span class="dashboard-subtle">Tipo:</span>
+                                            <span>{{ documento.get_extension|default:'Archivo' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dashboard-list-date">{{ documento.fecha_carga|date:'d M Y' }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="dashboard-subtle">Aún no hay documentos cargados.</p>
+                {% endif %}
+            </div>
+
+            <div class="dashboard-list-card">
+                <h2>Pendientes de firma</h2>
+                {% if documentos_pendientes %}
+                    <ul class="dashboard-list">
+                        {% for documento in documentos_pendientes %}
+                            <li class="dashboard-list-item">
+                                <div class="dashboard-list-item-left">
+                                    <div class="dashboard-list-icon">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                    </div>
+                                    <div class="dashboard-list-content">
+                                        <strong>{{ documento.titulo }}</strong>
+                                        <div class="dashboard-list-meta">
+                                            <span class="dashboard-badge badge-pending">Pendiente</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dashboard-list-date">{{ documento.fecha_carga|date:'d M Y' }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="dashboard-subtle">Todos los documentos ya están firmados.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="dashboard-summary-card">
+            <h2>Resumen</h2>
+            <div class="dashboard-summary-grid">
+                <div class="dashboard-summary-item dashboard-summary-documents">
+                    <span class="dashboard-summary-indicator"></span>
+                    <div>
+                        <strong>{{ total_documentos }}</strong>
+                        <small>Total documentos</small>
+                    </div>
+                </div>
+                <div class="dashboard-summary-item dashboard-summary-signed">
+                    <span class="dashboard-summary-indicator"></span>
+                    <div>
+                        <strong>{{ documentos_firmados }}</strong>
+                        <small>Firmados</small>
+                    </div>
+                </div>
+                <div class="dashboard-summary-item dashboard-summary-pending">
+                    <span class="dashboard-summary-indicator"></span>
+                    <div>
+                        <strong>{{ documentos_por_firmar }}</strong>
+                        <small>Pendientes</small>
+                    </div>
+                </div>
+            </div>
+            <p class="dashboard-card-note mt-4">Este panel muestra un panorama rápido de tu actividad de firma digital. Navega a la sección de Documentos para revisar cada elemento con detalle.</p>
+        </section>
+    </main>
+</div>
+{% endblock %}
